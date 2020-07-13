@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
-		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Df5kztZ3rOcLOonFN1rudtIxm6buhcdA"></script>
+		<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=Df5kztZ3rOcLOonFN1rudtIxm6buhcdA"></script>
 	</head>
 	<body>
 		
@@ -13,7 +13,6 @@
 			    let lat = position.coords.latitude;
 			    let lng = position.coords.longitude;
 				
-				alert(lat+","+lng);
 			    const pointBak = new BMap.Point(lng, lat);
 			    const convertor = new BMap.Convertor();
 			    convertor.translate([pointBak], 1, 5,function(resPoint) {
@@ -21,8 +20,6 @@
 
 			            lng = resPoint.points[0].lng;
 			            lat = resPoint.points[0].lat;
-						
-						alert(lat+","+lng);
 			        }
 			        const point = new BMap.Point(lng, lat);
 			        const geo = new BMap.Geocoder();
@@ -33,10 +30,33 @@
 						var addComp = res.surroundingPois;
 						alert(JSON.stringify(addComp));
 						alert(addComp[0].title);
-			
+						
+						
+						var arrstr = sessionStorage.getItem("arrstr");
+						var arr;
+						if(arrstr)
+						{
+							arr = JSON.parse(arrstr);
+						}
+						else
+						{
+							arr = [];
+						}
+						
+						var obj = {};						
+						obj.stime = new Date;
+						obj.place = addComp[0].title;
+						arr.push(obj);
+						
+						sessionStorage.setItem("arrstr",JSON.stringify(arr));
+
 			        });
 			    });
 			});
+			
+			
+			
+			
 			
 		</script>
 	</body>
