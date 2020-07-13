@@ -27,11 +27,9 @@
 			        const point = new BMap.Point(lng, lat);
 			        const geo = new BMap.Geocoder();
 					
-					alert(geo);
 			        geo.getLocation(point, (res) => {
 						
-						alert("haha");
-						alert(res);
+						alert(JSON.stringify(res));
 						var addComp = rs.addressComponents;
 						
 						alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
