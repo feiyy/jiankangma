@@ -9,18 +9,7 @@
 	<body>
 		<div id="qrcode"></div>
 		<script>
-			
-			var color = getColor();
-			
-			var qrcode = new QRCode(document.getElementById("qrcode"), {
-			    text: "http://www.runoob.com",
-			    width: 128,
-			    height: 128,
-			    colorDark : color,
-			    colorLight : "#ffffff",
-			    correctLevel : QRCode.CorrectLevel.H
-			});
-			
+
 			navigator.geolocation.getCurrentPosition((position) => {
 			    let lat = position.coords.latitude;
 			    let lng = position.coords.longitude;
@@ -44,6 +33,17 @@
 						alert(addComp[0].title);
 						
 						sendpos(addComp[0].title);
+						
+						var color = getColor();
+						
+						var qrcode = new QRCode(document.getElementById("qrcode"), {
+						    text: "http://www.runoob.com",
+						    width: 128,
+						    height: 128,
+						    colorDark : color,
+						    colorLight : "#ffffff",
+						    correctLevel : QRCode.CorrectLevel.H
+						});
 						
 			        });
 					
@@ -87,7 +87,7 @@
 				arr = JSON.parse(arrstr);
 				for(var i=0;i<arr.length;i++)
 				{
-					var place = arr[i];
+					var place = arr[i].place;
 					
 					if(redplace.indexOf(place)>0)
 					{
