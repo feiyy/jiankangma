@@ -3,11 +3,23 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
-		<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=Df5kztZ3rOcLOonFN1rudtIxm6buhcdA"></script>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Df5kztZ3rOcLOonFN1rudtIxm6buhcdA"></script>
+	    <script src="js/qrcode.js"></script>
 	</head>
 	<body>
-		
+		<div id="qrcode"></div>
 		<script>
+			
+			var color = getColor();
+			
+			var qrcode = new QRCode(document.getElementById("qrcode"), {
+			    text: "http://www.runoob.com",
+			    width: 128,
+			    height: 128,
+			    colorDark : color,
+			    colorLight : "#ffffff",
+			    correctLevel : QRCode.CorrectLevel.H
+			});
 			
 			navigator.geolocation.getCurrentPosition((position) => {
 			    let lat = position.coords.latitude;
@@ -31,31 +43,63 @@
 						alert(JSON.stringify(addComp));
 						alert(addComp[0].title);
 						
+						sendpos(addComp[0].title);
 						
-						var arrstr = sessionStorage.getItem("arrstr");
-						var arr;
-						if(arrstr)
-						{
-							arr = JSON.parse(arrstr);
-						}
-						else
-						{
-							arr = [];
-						}
-						
-						var obj = {};						
-						obj.stime = new Date;
-						obj.place = addComp[0].title;
-						arr.push(obj);
-						
-						sessionStorage.setItem("arrstr",JSON.stringify(arr));
-
 			        });
+					
 			    });
 			});
 			
 			
+			function sendpos(place)
+			{
+				var arrstr = sessionStorage.getItem("arrstr");
+				var arr;
+				if(arrstr)
+				{
+					arr = JSON.parse(arrstr);
+				}
+				else
+				{
+					arr = [];
+				}
+				
+				var obj = {};						
+				obj.stime = new Date;
+				obj.place = place;
+				arr.push(obj);
+				
+				sessionStorage.setItem("arrstr",JSON.stringify(arr));
+			}
 			
+			function getColor(){
+				
+				var redplace = ['天河家园-吉兴苑','和平大润发'];
+				var yellowplace = ['浑南医院','市府广场'];
+				
+				var arrstr = sessionStorage.getItem("arrstr");
+				var arr;
+				if(!arrstr)
+				{
+					return "black";
+				}
+				arr = JSON.parse(arrstr);
+				for(var i=0;i<arr.length;i++)
+				{
+					var place = arr[i];
+					
+					if(redplace.indexOf(place)>0)
+					{
+						return "red";
+					}
+					if(yellowplace.indexOf(place)>0)
+					{
+						return "yellow";
+					}
+				}
+								
+				return "black";			
+			}
 			
 			
 		</script>
