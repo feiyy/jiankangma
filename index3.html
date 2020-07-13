@@ -30,9 +30,9 @@
 			        geo.getLocation(point, (res) => {
 						
 						alert(JSON.stringify(res));
-						var addComp = res.addressComponents;
+						var addComp = res.surroundingPois;
 						alert(JSON.stringify(addComp));
-						alert(addComp.surroundingPois[0].title);
+						alert(addComp[0].title);
 			
 			        });
 			    });
