@@ -26,9 +26,11 @@
 			        }
 			        const point = new BMap.Point(lng, lat);
 			        const geo = new BMap.Geocoder();
+					
+					alert(geo);
 			        geo.getLocation(point, (res) => {
 						
-						
+						alert("haha");
 						alert(res);
 						var addComp = rs.addressComponents;
 						
