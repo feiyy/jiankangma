@@ -30,9 +30,9 @@
 			        geo.getLocation(point, (res) => {
 						
 						alert(JSON.stringify(res));
-						var addComp = rs.addressComponents;
+						var addComp = res.addressComponents;
 						
-						alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+						alert(res.addressComponents.surroundingPois[0].title);
 			
 			        });
 			    });
