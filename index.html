@@ -3,135 +3,26 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
-		
-		<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
-		<script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=Df5kztZ3rOcLOonFN1rudtIxm6buhcdA"></script>
+	
 	</head>
 	<body>
-		<div id="testInfo"></div>
-		<script>
-			var type3 = [550, 30];//设定  google  gps格式转换
-			var transTypesParam = "";
-			
-			function getLocation(){ 
-				var options = {
-						  enableHighAccuracy: true,
-						  timeout: 5000,
-						  maximumAge: 0
-						};
-				/* if (navigator.geolocation){ //用浏览器获取坐标地址
-					 navigator.geolocation.getCurrentPosition(showPosition,showError);
-				}else{ 
-					alert("浏览器不支持地理定位。"); 
-				}  */
-				
-				  if (navigator.geolocation){ 
-					navigator.geolocation.getCurrentPosition(showPosition,showError,options); 
-				  }else{ 
-					alert("浏览器不支持地理定位。"); 
-				  } 
-					
-			} 
-			
-			//获取浏览器GPS成功
-			function showPosition(position){ 
-			alert("haha");
-			    var x = position.coords.longitude; //经度 
-			    var y = position.coords.latitude;//纬度 
-			    
-			    transTypesParam = getTransType(position.coords.accuracy);//该方法很重要，用来判断手机定位格式，方法在下方
-			    if($("#testInfo") != null && $("#testInfo").length >0) {
-			    	$("#testInfo").html("accuracy : " + position.coords.accuracy +  "x : " + x + "  y : " + y);
-			    }
-			    var ggPoint = new BMap.Point(x,y);
-			    showMap(ggPoint, true);//显示地图坐标
-			} 
-			
-			
-			//获取失败，失败后用百度地图自带的方法，但是定位会不准
-			function showError(error){
-				alert("xx");
-				var geolocation = new BMap.Geolocation();
-				geolocation.getCurrentPosition(function(r){
-						if(this.getStatus() == BMAP_STATUS_SUCCESS){
-							showMap(r.point, false);
-						}
-						else {
-							alert('定位失败：'+this.getStatus());
-						}        
-					},{enableHighAccuracy: true})
-					
-				
-				if($("#testInfo") != null && $("#testInfo").length >0) {
-					switch(error.code)
-				    {
-				    case error.PERMISSION_DENIED:
-				    	$("#testInfo").html(error.code + "User denied the request for Geolocation.");
-				      break;
-				    case error.POSITION_UNAVAILABLE:
-				    	$("#testInfo").html(error.code + "Location information is unavailable.");
-				      break;
-				    case error.TIMEOUT:
-				    	$("#testInfo").html(error.code + "The request to get user location timed out.");
-				      break;
-				    case error.UNKNOWN_ERROR:
-				    	$("#testInfo").html(error.code + "An unknown error occurred.");
-				      break;
-				    }
-				}
-					
-			} 
-			function getTransType(accuracy) {
-				if(window.localStorage){
-					var transType = localStorage.getItem("xdlcfwapp_transType");
-					if(transType != null && transType != "") {
-						return transType;
-					} 
-				}
-				
-				for(var i=0; i<type3.length ; i++) {
-					if(type3[i] == accuracy) {
-						localStorage.setItem("xdlcfwapp_transType", 3);
-						return 3;
-					}
-				}
-				localStorage.setItem("xdlcfwapp_transType", 1);
-				return 1;
-			};
-			
-			
-			var bm = null;
-				function showMap(ggPoint,isTrans) {
-				    
-				   	// 百度地图API功能
-				   	bm = new BMap.Map("container");
-				    bm.centerAndZoom(ggPoint, 15);
-				    bm.enableScrollWheelZoom(true);
-				    if(isTrans) {
-					    bm.addControl(new BMap.NavigationControl());
-				
-					    //坐标转换完之后的回调函数
-					    translateCallback = function (data){
-					      if(data.status === 0) {
-					    	  showPositionIcon(data.points[0]);
-					  	      queryMarkers();
-					      }
-					    }
-				
-					    setTimeout(function(){
-					        var convertor = new BMap.Convertor();
-					        var pointArr = [];
-					        pointArr.push(ggPoint);
-					        convertor.translate(pointArr, transTypesParam, 5, translateCallback)
-					    }, 1000);
-				    } else {
-				    	showPositionIcon(ggPoint);
-					    queryMarkers();
-				    }
-				}
-				
-				getLocation();
-		</script>
+		
+       <script>
+       
+       	navigator.geolocation.getCurrentPosition((position) => {
+       	    let lat = position.coords.latitude;
+       	    let lng = position.coords.longitude;
+       		
+			alert(lat);
+			alert(lng);
+       	 
+       	});
+       	
+       	
+      
+       	
+       	
+       </script>
 		
 		
 	</body>

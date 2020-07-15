@@ -4,81 +4,36 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title></title>
-	<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>	
-    <script src="js/qrcode.js"></script>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Df5kztZ3rOcLOonFN1rudtIxm6buhcdA"></script>
 </head>
 <body>
-	<div id="qrcode"></div>
-	<div id="baidu"></div>
+	
 	<script type="text/javascript">
-	//new QRCode(document.getElementById("qrcode"), "http://www.runoob.com");  // 设置要生成二维码的链接
-	
-	var qrcode = new QRCode(document.getElementById("qrcode"), {
-	    text: "http://www.runoob.com",
-	    width: 128,
-	    height: 128,
-	    colorDark : "#000000",
-	    colorLight : "#ffffff",
-	    correctLevel : QRCode.CorrectLevel.H
-	});
-	
-	//qrcode.clear(); // 清除代码
-	//qrcode.makeCode("http://www.w3cschool.cc"); // 生成另外一个二维码
-	
-	function getLocation(){ 
-	  if (navigator.geolocation){ 
-	    navigator.geolocation.getCurrentPosition(showPosition,showError); 
-	  }else{ 
-	    alert("浏览器不支持地理定位。"); 
-	  } 
-	}
-	
-	function showPosition(position){ 
-	   //将我们获取到的经纬度保存到变量中
-	   alert("hahah");
-	  //var latlon = position.coords.latitude+','+position.coords.longitude; 
+
+      const pointBak = new BMap.Point(123.406933, 41.743451);
+      const convertor = new BMap.Convertor();
+      convertor.translate([pointBak], 1, 5,function(resPoint) {
+          if(resPoint && resPoint.points && resPoint.points.length>0){
+             
+              lng = resPoint.points[0].lng;
+              lat = resPoint.points[0].lat;
+          }
+          const point = new BMap.Point(lng, lat);
+          const geo = new BMap.Geocoder();
+      	
+          geo.getLocation(point, (res) => {
+      		
+      		alert(JSON.stringify(res));
+      		var addComp = res.surroundingPois;
+      		alert(JSON.stringify(addComp));
+      		alert(addComp[0].title);
+      		
+      		
+      		
+          });
+      	
+      });
 	  
-	  alert(latlon);
-	 
-	  //baidu接口
-	  var url = "http://api.map.baidu.com/geocoder/v2/?ak=C93b5178d7a8ebdb830b9b557abce78b&callback=renderReverse&location="+latlon+"&output=json&pois=0" 
-	  $.ajax({ 
-	    type: "GET", 
-	    dataType: "jsonp", 
-	    url: url, 
-	    beforeSend: function(){ 
-	      $("#baidu").html('正在定位...'); 
-	    }, 
-	    success: function (data) { 
-	      if(data.status==0){ 
-	         $("#baidu").html(data.result.formatted_address); 
-	       } 
-	     }, 
-	     error: function (XMLHttpRequest, textStatus, errorThrown) { 
-	       $("#baidu").html(latlon+"地址位置获取失败"); 
-	    } 
-	  }); 
-	};
-	
-	function showError(error){ 
-		alert("err");
-	  switch(error.code) { 
-	    case error.PERMISSION_DENIED: 
-	      alert("定位失败,用户拒绝请求地理定位"); 
-	      break; 
-	    case error.POSITION_UNAVAILABLE: 
-	      alert("定位失败,位置信息是不可用"); 
-	      break; 
-	    case error.TIMEOUT: 
-	      alert("定位失败,请求获取用户位置超时"); 
-	      break; 
-	    case error.UNKNOWN_ERROR: 
-	      alert("定位失败,定位系统失效"); 
-	      break; 
-	  } 
-	}
-	
-	getLocation();
 	</script>
 </body>
 </html>
