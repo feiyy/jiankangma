@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Df5kztZ3rOcLOonFN1rudtIxm6buhcdA"></script>
+	    <script src="js/qrcode.js"></script>
+	</head>
+	<body>
+		<div id="qrcode"></div>
+		<script>
+
+			navigator.geolocation.getCurrentPosition((position) => {
+			    let lat = position.coords.latitude;
+			    let lng = position.coords.longitude;
+				
+			    const pointBak = new BMap.Point(lng, lat);
+			    const convertor = new BMap.Convertor();
+			    convertor.translate([pointBak], 1, 5,function(resPoint) {
+			        if(resPoint && resPoint.points && resPoint.points.length>0){
+
+			            lng = resPoint.points[0].lng;
+			            lat = resPoint.points[0].lat;
+			        }
+			        const point = new BMap.Point(lng, lat);
+			        const geo = new BMap.Geocoder();
+					
+			        geo.getLocation(point, (res) => {
+						
+						//alert(JSON.stringify(res));
+						var addComp = res.surroundingPois;
+						alert(addComp[0].title);
+						
+						//将位置信息发送给服务器后台，得到当前用户的信息，用来二维码（text和colorDark，由返回信息决定）
+						
+						var qrcode = new QRCode(document.getElementById("qrcode"), {
+						    text: "个人信息标识",
+						    width: 128,
+						    height: 128,
+						    colorDark : "green",
+						    colorLight : "#ffffff",
+						    correctLevel : QRCode.CorrectLevel.H
+						});
+						
+			        });
+					
+			    });
+			});
+			
+		</script>
+	</body>
+</html>

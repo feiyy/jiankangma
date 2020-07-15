@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+		<title></title>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Df5kztZ3rOcLOonFN1rudtIxm6buhcdA"></script>
+	    <script src="js/qrcode.js"></script>
+	</head>
+	<body>
+		<div id="qrcode"></div>
+		<script>
+
+			navigator.geolocation.getCurrentPosition((position) => {
+			    let lat = position.coords.latitude;
+			    let lng = position.coords.longitude;
+				
+			    const pointBak = new BMap.Point(lng, lat);
+			    const convertor = new BMap.Convertor();
+			    convertor.translate([pointBak], 1, 5,function(resPoint) {
+			        if(resPoint && resPoint.points && resPoint.points.length>0){
+
+			            lng = resPoint.points[0].lng;
+			            lat = resPoint.points[0].lat;
+			        }
+			        const point = new BMap.Point(lng, lat);
+			        const geo = new BMap.Geocoder();
+					
+			        geo.getLocation(point, (res) => {
+						
+						var addComp = res.surroundingPois;
+	
+						sendpos(addComp[0].title);
+						
+						var color = getColor();
+						
+
+						var qrcode = new QRCode(document.getElementById("qrcode"), {
+						    text: "个人信息标识",
+						    width: 128,
+						    height: 128,
+						    colorDark : color,
+						    colorLight : "#ffffff",
+						    correctLevel : QRCode.CorrectLevel.H
+						});
+						
+			        });
+					
+			    });
+			});
+			
+			
+			function sendpos(place)
+			{
+				var arrstr = sessionStorage.getItem("arrstr");
+				var arr;
+				if(arrstr)
+				{
+					arr = JSON.parse(arrstr);
+				}
+				else
+				{
+					arr = [];
+				}
+				
+				var obj = {};						
+				obj.stime = new Date;
+				obj.place = place;
+				arr.push(obj);
+				
+				sessionStorage.setItem("arrstr",JSON.stringify(arr));
+			}
+			
+			function getColor(){
+				
+				var redplace = ['天河家园-吉兴苑','和平大润发'];
+				var yellowplace = ['浑南医院','市府广场'];
+				
+				var arrstr = sessionStorage.getItem("arrstr");
+				alert(arrstr);
+				var arr;
+				if(!arrstr)
+				{
+					return "green";
+				}
+				arr = JSON.parse(arrstr);
+				for(var i=0;i<arr.length;i++)
+				{
+					var place = arr[i].place;
+					
+					if(redplace.indexOf(place)>=0)
+					{
+						return "red";
+					}
+					if(yellowplace.indexOf(place)>=0)
+					{
+						return "yellow";
+					}
+				}
+								
+				return "green";			
+			}
+			
+			
+		</script>
+	</body>
+</html>
